@@ -1,0 +1,10 @@
+.venv
+__pycache__
+*.pyc
+.env
+.streamlit/secrets.toml
+*.gguf
+model/
+data/
+.pytest__cache/
+Thumbs.db

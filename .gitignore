@@ -1,10 +1,12 @@
 .venv
 __pycache__
 *.pyc
+.env.*
 .env
 .streamlit/secrets.toml
 *.gguf
 model/
 data/
-.pytest__cache/
+.pytest_cache/
 Thumbs.db
+!.env.example

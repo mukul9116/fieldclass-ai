@@ -25,10 +25,10 @@ DEFAULT_PROFILE = "lite"
 
 def get_profile(name: str | None = None) -> ModelProfile:
     if(name is None):
-        name = os.environ.get("fieldclass_profile", DEFAULT_PROFILE)
+        name = os.environ.get("FIELDCLASS_PROFILE", DEFAULT_PROFILE)
     if(name not in PROFILES):
         available = ", ".join(PROFILES)
-        raise ValueError(f"unknown profile '{name}'. available PROFILES: {available}")
+        raise ValueError(f"Unknown profile '{name}'. Available Profiles: {available}")
     return PROFILES[name]
 
 

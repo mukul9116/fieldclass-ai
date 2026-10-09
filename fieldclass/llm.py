@@ -25,16 +25,12 @@ def ask_once(messages: list[dict], schema: type[BaseModel], profile: ModelProfil
 
         )
     
-    except ConnectionError as e:
-        raise LLMUnavailable("Cannot reach Ollama, is it running?") from e
-    
-    except httpx.TimeoutException as e:
-        raise LLMUnavailable(f"The model did not answer within {profile.timeout_s} seconds. "
-         "It may be too slow or still loading. Try again, or raise timeout_s in config.py.") from e
-    
     except ollama.ResponseError as e:
         if e.status_code == 404:
             raise LLMUnavailable(f"Model '{profile.model}' is not installed. Run: ollama pull {profile.model}") from e
+        
+        if e.status_code == 500:
+            raise LLMOutputError(f"Ollama could not finish the answer (500): {e.error}") from e
         
         raise LLMUnavailable(f"Ollama returned an error ({e.status_code}): {e.error}") from e
     

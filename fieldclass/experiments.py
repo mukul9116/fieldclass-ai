@@ -19,3 +19,22 @@ class Experiment:
 
 def trig_height(distance_m: float, angle_deg:float, eye_height_m:float) -> float:
     return distance_m * math.tan(math.radians(angle_deg)) + eye_height_m
+
+TRIG_HEIGHT = Experiment(
+    topic="trig_height",
+    title="Estimate the height of a tree or pole",
+    card=(
+        "Stand on flat, open ground, far from any road. "
+        "Move until you must tilt your head up about 30 to 60 degrees to see the top. "
+        "Measure your distance from the base with a tape or by counting steps. "
+        "Make a clinometer: tape a straw along the flat edge of a protractor and hang a weighted string from its center. "
+        "Sight the top through the straw and read the angle above horizontal where the string crosses the scale. "
+        "Measure your eye height. "
+        "Height = distance x tan(angle) + eye height."
+    ),
+    report_fields=(
+        ReportField("distance", "Distance from the tree", "m", 1, 100),
+        ReportField("angle", "Angle up to the top", "degrees", 5, 85),
+        ReportField("eye_height", "Height of your eyes", "m", 0.5, 2.2),
+    ),
+)

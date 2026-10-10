@@ -16,6 +16,7 @@ class Experiment:
     title: str
     card:str
     report_fields :tuple[ReportField, ...]
+    concept: str
 
 def trig_height(distance_m: float, angle_deg:float, eye_height_m:float) -> float:
     return distance_m * math.tan(math.radians(angle_deg)) + eye_height_m
@@ -32,9 +33,17 @@ TRIG_HEIGHT = Experiment(
         "Measure your eye height. "
         "Height = distance x tan(angle) + eye height."
     ),
+    concept=(
+        "The distance and the height above your eyes form a right triangle, "
+        "so tan(angle) = height above your eyes / distance, "
+        "and adding your eye height gives the full height of the tree."
+    ),
     report_fields=(
         ReportField("distance", "Distance from the tree", "m", 1, 100),
         ReportField("angle", "Angle up to the top", "degrees", 5, 85),
         ReportField("eye_height", "Height of your eyes", "m", 0.5, 2.2),
     ),
 )
+
+def record_items(experiment: Experiment) -> list[str]:
+    return [f"{field.label} ({field.unit})" for field in experiment.report_fields]

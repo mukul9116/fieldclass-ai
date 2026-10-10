@@ -1,6 +1,9 @@
 import ollama 
 from pydantic import ValidationError,BaseModel
 import httpx
+import logging
+
+logger = logging.getLogger(__name__)
 
 from fieldclass.config import get_profile,ModelProfile
 
@@ -51,6 +54,7 @@ def generate_structured(messages: list[dict],schema:type[BaseModel], profile:Mod
             return ask_once(messages, schema, profile)
         except LLMOutputError as e:
             last_error = e
+            logger.warning("Attempt %s failed: %s", attempt + 1, e)
     raise LLMOutputError(f"Gave up after {max_retries + 1} attempt. Last Problem: {last_error}")
 
 

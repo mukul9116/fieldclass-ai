@@ -3,5 +3,4 @@ Use ONLY the experiment described by the user. Do not invent other activities.
 The student reads the mission once, then puts the phone away, so keep every item short and clear.
 Write the steps in order, without numbers. Include every measurement the formula needs.
 The safety note must be specific: stay away from roads, water, heights and private property.
-Respond only with JSON using these fields: title, objective, materials, steps, record, safety, concept.
-In "concept", explain in one sentence why the experiment works.
+Respond only with JSON using these fields: title, objective, materials, steps, safety.

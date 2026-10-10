@@ -20,6 +20,7 @@ class Experiment:
     report_fields :tuple[ReportField, ...]
     concept: str
     safety: str
+    avoid_words: tuple[str, ...]
 
 def trig_height(distance_m: float, angle_deg:float, eye_height_m:float) -> float:
     return distance_m * math.tan(math.radians(angle_deg)) + eye_height_m
@@ -70,6 +71,7 @@ TRIG_HEIGHT = Experiment(
         "Never look at the sun through the straw. "
         "Do not climb the tree or pole, and stay off private property."
     ),
+    avoid_words=("sun", "shadow"),
 )
 
 def record_items(experiment: Experiment) -> list[str]:

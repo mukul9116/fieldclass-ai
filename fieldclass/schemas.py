@@ -11,10 +11,9 @@ class MissionRequest(BaseModel):
     notes: str | None = Field(default =None, max_length = 500)
 
 class FieldMission(BaseModel):
-    title: str = Field(max_length=60)
-    objective: str = Field(max_length=240)
-    materials: list[str] = Field(min_length=1, max_length=5)
-    steps: list[str] = Field(min_length=2, max_length=8)
+    title: str = Field(max_length=80)
+    objective: str = Field(max_length=300)
+    tip: str = Field(max_length=300)
 
 class Mission(BaseModel):
     topic: Topic
@@ -22,6 +21,7 @@ class Mission(BaseModel):
     minutes: int
     title: str
     objective: str
+    tip: str
     materials: list[str]
     steps: list[str]
     record: list[str]

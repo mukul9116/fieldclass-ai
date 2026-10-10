@@ -27,3 +27,10 @@ class Mission(BaseModel):
     record: list[str]
     concept: str
     safety: str
+
+class Report(BaseModel):
+    topic: Topic
+    values: dict[str, float]
+    answer: float | None = None
+    observations: str = Field(default="", max_length=600)
+    reflection: str = Field(default="", max_length=600)

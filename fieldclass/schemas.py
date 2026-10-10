@@ -15,3 +15,15 @@ class FieldMission(BaseModel):
     objective: str = Field(max_length=240)
     materials: list[str] = Field(min_length=1, max_length=5)
     steps: list[str] = Field(min_length=2, max_length=8)
+
+class Mission(BaseModel):
+    topic: Topic
+    difficulty: Difficulty
+    minutes: int
+    title: str
+    objective: str
+    materials: list[str]
+    steps: list[str]
+    record: list[str]
+    concept: str
+    safety: str

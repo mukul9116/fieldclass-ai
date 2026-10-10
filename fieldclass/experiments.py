@@ -53,3 +53,14 @@ TRIG_HEIGHT = Experiment(
 
 def record_items(experiment: Experiment) -> list[str]:
     return [f"{field.label} ({field.unit})" for field in experiment.report_fields]
+
+EXPERIMENTS = {
+    "trig_height": TRIG_HEIGHT,
+}
+
+
+def get_experiment(topic: str) -> Experiment:
+    if topic not in EXPERIMENTS:
+        available = ", ".join(EXPERIMENTS)
+        raise ValueError(f"No experiment card for '{topic}' yet. Available: {available}")
+    return EXPERIMENTS[topic]

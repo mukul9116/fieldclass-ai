@@ -1,5 +1,5 @@
 import pytest 
-from fieldclass.experiments import trig_height, TRIG_HEIGHT, record_items
+from fieldclass.experiments import trig_height, TRIG_HEIGHT, record_items, get_experiment
 
 def test_trig_height_at_45_degrees():
     assert trig_height(10, 45, 1.5) == pytest.approx(11.5)
@@ -21,3 +21,7 @@ def test_record_items_for_trig_height():
 
 def test_trig_safety_mentions_roads():
     assert "road" in TRIG_HEIGHT.safety.lower()
+
+def test_unknown_topic_gives_clear_error():
+    with pytest.raises(ValueError, match="No experiment card"):
+        get_experiment("cooking")

@@ -34,3 +34,19 @@ class Report(BaseModel):
     answer: float | None = None
     observations: str = Field(default="", max_length=600)
     reflection: str = Field(default="", max_length=600)
+
+class FeedbackText(BaseModel):
+    went_well: str = Field(max_length=300)
+    hint: str = Field(max_length=400)
+    next_challenge: str = Field(max_length=300)
+
+
+class Feedback(BaseModel):
+    verdict: str
+    went_well: str
+    hint: str
+    next_challenge: str
+    mistakes: list[str]
+    problems: list[str]
+    concept: str
+    expected: float | None = None

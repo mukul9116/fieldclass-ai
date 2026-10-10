@@ -12,9 +12,9 @@ class MissionRequest(BaseModel):
 
 class FieldMission(BaseModel):
     title : str = Field(max_length = 60)
-    objective: str = Field(max_length = 160)
+    objective: str = Field(max_length = 240)
     materials: list[str] = Field(min_length = 1, max_length = 5)
-    steps: list[str] = Field(min_length = 2, max_length = 6)
+    steps: list[str] = Field(min_length=2, max_length=8)
     record: list[str] = Field(min_length = 1, max_length=6)
     safety: str = Field(max_length = 160)
-    concept: str = Field(max_length = 200)
+    concept: str = Field(max_length=400)

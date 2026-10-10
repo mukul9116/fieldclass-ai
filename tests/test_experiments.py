@@ -1,5 +1,7 @@
 import pytest 
-from fieldclass.experiments import trig_height, TRIG_HEIGHT, record_items, get_experiment
+from fieldclass.experiments import trig_height, TRIG_HEIGHT, record_items, get_experiment, EXPERIMENTS
+from typing import get_args
+from fieldclass.schemas import Topic
 
 def test_trig_height_at_45_degrees():
     assert trig_height(10, 45, 1.5) == pytest.approx(11.5)
@@ -29,3 +31,16 @@ def test_unknown_topic_gives_clear_error():
 def test_trig_has_materials_and_steps():
     assert len(TRIG_HEIGHT.materials) >= 3
     assert len(TRIG_HEIGHT.steps) >= 5
+
+def test_every_experiment_is_complete():
+    for topic, experiment in EXPERIMENTS.items():
+        assert experiment.topic == topic
+        assert len(experiment.materials) >= 3
+        assert len(experiment.steps) >= 5
+        assert experiment.safety
+        for field in experiment.report_fields:
+            assert field.min_value < field.max_value
+
+
+def test_every_topic_has_a_card():
+    assert set(EXPERIMENTS) == set(get_args(Topic))

@@ -4,7 +4,7 @@ from fieldclass.config import ModelProfile
 from fieldclass.experiments import get_experiment, record_items
 from fieldclass.llm import LLMOutputError, generate_structured
 from fieldclass.prompts import build_mission_messages
-from fieldclass.safety import find_problems
+from fieldclass.safety import find_problems,has_digits
 from fieldclass.schemas import FieldMission, Mission, MissionRequest
 
 logger = logging.getLogger(__name__)
@@ -21,6 +21,8 @@ def generate_mission(request: MissionRequest, profile: ModelProfile | None = Non
         problems = find_problems(
             [written.title, written.objective, written.tip], experiment.avoid_words
         )
+        if has_digits(written.tip):
+            problems.append("numbers in tip")
         if not problems:
             return Mission(
                 topic=request.topic,

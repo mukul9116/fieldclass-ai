@@ -197,7 +197,7 @@ AVERAGE_VELOCITY = Experiment(
         ReportField("time_2", "Time of run 2", "s", 1, 120),
         ReportField("time_3", "Time of run 3", "s", 1, 120),
     ),
-    avoid_words=("sprint", "cycl", "bike", "skate"),
+    avoid_words=("sprint", "cycl", "bike", "skate", "increase", "faster", "accelerat", "hurry"),
 )
 
 EXPERIMENTS = {

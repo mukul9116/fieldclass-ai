@@ -15,6 +15,8 @@ class Experiment:
     topic: Topic
     title: str
     card:str
+    materials: tuple[str, ...]
+    steps: tuple[str, ...]
     report_fields :tuple[ReportField, ...]
     concept: str
     safety: str
@@ -30,9 +32,28 @@ TRIG_HEIGHT = Experiment(
         "Move until you must tilt your head up about 30 to 60 degrees to see the top. "
         "Measure your distance from the base with a tape or by counting steps. "
         "Make a clinometer: tape a straw along the flat edge of a protractor and hang a weighted string from its center. "
-        "Sight the top through the straw and read the angle above horizontal where the string crosses the scale. "
+        "First sight the horizon through the straw and note where the string crosses the scale. "
+        "Then sight the top and note the new reading. The angle is the difference between the two readings. "
         "Measure your eye height. "
         "Height = distance x tan(angle) + eye height."
+    ),
+    materials=(
+        "Tape measure (or count your steps)",
+        "Protractor",
+        "Drinking straw",
+        "String",
+        "Small weight (a washer or a stone)",
+        "Sticky tape",
+        "Pencil and paper",
+    ),
+    steps=(
+        "Find flat, open ground well away from roads, with a clear view of the top of a tree or pole.",
+        "Build a clinometer: tape a straw along the flat edge of a protractor, and hang a weighted string from the center of the protractor.",
+        "Look at the horizon through the straw and note the number where the string crosses the scale.",
+        "Walk to a spot where you must tilt your head up about 30 to 60 degrees to see the top.",
+        "Measure the distance from your feet to the base of the tree, with a tape or by counting steps.",
+        "Look at the top through the straw and note the new number where the string crosses the scale. The angle is the difference between the two numbers.",
+        "Measure the height of your eyes above the ground, then write all three measurements on paper.",
     ),
     concept=(
         "The distance and the height above your eyes form a right triangle, "

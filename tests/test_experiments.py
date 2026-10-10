@@ -25,3 +25,7 @@ def test_trig_safety_mentions_roads():
 def test_unknown_topic_gives_clear_error():
     with pytest.raises(ValueError, match="No experiment card"):
         get_experiment("cooking")
+
+def test_trig_has_materials_and_steps():
+    assert len(TRIG_HEIGHT.materials) >= 3
+    assert len(TRIG_HEIGHT.steps) >= 5

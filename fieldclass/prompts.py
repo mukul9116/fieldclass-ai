@@ -38,10 +38,6 @@ def build_feedback_messages(report: Report, experiment: Experiment, grade: Grade
         lines.append("Problems with the report: " + "; ".join(grade.problems))
     if grade.mistakes:
         lines.append("Likely mistakes: " + "; ".join(grade.mistakes))
-    if report.observations:
-        lines.append(f"Student observations: {report.observations}")
-    if report.reflection:
-        lines.append(f"Student reflection: {report.reflection}")
     return [
         {"role": "system", "content": load_prompt("feedback_system.txt")},
         {"role": "user", "content": "\n".join(lines)},

@@ -92,3 +92,20 @@ def grade(report: Report, experiment: Experiment) -> Grade:
 
     mistakes = [] if verdict == "correct" else diagnose(report)
     return Grade(verdict, expected, mistakes=tuple(mistakes))
+
+WENT_WELL = {
+    "correct": "Your calculation matches your own measurements. Well done.",
+    "partial": "You collected a full set of sensible measurements, and your answer is close.",
+    "incorrect": "You collected a full set of sensible measurements, which is the hardest part outdoors.",
+    "missing_info": "Thanks for reporting back. A few pieces are still missing.",
+}
+
+
+def hint_text(result: Grade) -> str:
+    if result.verdict == "correct":
+        return "No hint needed. Try the next challenge."
+    if result.verdict == "missing_info":
+        return "Please fix this: " + "; ".join(result.problems) + "."
+    if result.mistakes:
+        return "Check this: " + result.mistakes[0] + "."
+    return "Go through the formula again, one step at a time, using only your own measurements."

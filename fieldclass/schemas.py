@@ -36,8 +36,6 @@ class Report(BaseModel):
     reflection: str = Field(default="", max_length=600)
 
 class FeedbackText(BaseModel):
-    went_well: str = Field(max_length=300)
-    hint: str = Field(max_length=400)
     next_challenge: str = Field(max_length=300)
 
 

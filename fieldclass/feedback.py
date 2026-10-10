@@ -2,7 +2,7 @@ import logging
 
 from fieldclass.config import ModelProfile
 from fieldclass.experiments import get_experiment
-from fieldclass.grading import grade
+from fieldclass.grading import WENT_WELL, grade, hint_text
 from fieldclass.llm import LLMOutputError, generate_structured
 from fieldclass.prompts import build_feedback_messages
 from fieldclass.safety import find_problems, has_digits
@@ -20,15 +20,15 @@ def evaluate_report(report: Report, profile: ModelProfile | None = None, reveal:
     problems: list[str] = []
     for attempt in range(MAX_CONTENT_TRIES):
         written = generate_structured(messages, FeedbackText, profile)
-        texts = [written.went_well, written.hint, written.next_challenge]
+        texts = [written.next_challenge]
         problems = find_problems(texts, experiment.avoid_words)
         if any(has_digits(text) for text in texts):
             problems.append("numbers in feedback")
         if not problems:
             return Feedback(
                 verdict=result.verdict,
-                went_well=written.went_well,
-                hint=written.hint,
+                went_well=WENT_WELL[result.verdict],
+                hint=hint_text(result),
                 next_challenge=written.next_challenge,
                 mistakes=list(result.mistakes),
                 problems=list(result.problems),

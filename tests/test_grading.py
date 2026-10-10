@@ -1,7 +1,7 @@
 import pytest
 
 from fieldclass.experiments import TRIG_HEIGHT
-from fieldclass.grading import expected_answer, grade
+from fieldclass.grading import expected_answer, grade,hint_text
 from fieldclass.schemas import Report
 
 def test_trig_expected():
@@ -60,3 +60,12 @@ def test_radian_mode_is_spotted():
 
 def test_no_mistakes_when_correct():
     assert grade(make_report(11.5), TRIG_HEIGHT).mistakes == ()
+
+def test_hint_for_forgotten_eye_height():
+    result = grade(make_report(10.0), TRIG_HEIGHT)
+    assert "eye height" in hint_text(result)
+
+
+def test_hint_for_missing_answer():
+    result = grade(make_report(None), TRIG_HEIGHT)
+    assert "missing" in hint_text(result)

@@ -15,4 +15,3 @@ class FieldMission(BaseModel):
     objective: str = Field(max_length=240)
     materials: list[str] = Field(min_length=1, max_length=5)
     steps: list[str] = Field(min_length=2, max_length=8)
-    safety: str = Field(max_length=160)

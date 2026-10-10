@@ -18,3 +18,6 @@ def test_record_items_for_trig_height():
     items = record_items(TRIG_HEIGHT)
     assert len(items) == 3
     assert items[0] == "Distance from the tree (m)"
+
+def test_trig_safety_mentions_roads():
+    assert "road" in TRIG_HEIGHT.safety.lower()

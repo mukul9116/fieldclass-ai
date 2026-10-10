@@ -17,6 +17,7 @@ class Experiment:
     card:str
     report_fields :tuple[ReportField, ...]
     concept: str
+    safety: str
 
 def trig_height(distance_m: float, angle_deg:float, eye_height_m:float) -> float:
     return distance_m * math.tan(math.radians(angle_deg)) + eye_height_m
@@ -42,6 +43,11 @@ TRIG_HEIGHT = Experiment(
         ReportField("distance", "Distance from the tree", "m", 1, 100),
         ReportField("angle", "Angle up to the top", "degrees", 5, 85),
         ReportField("eye_height", "Height of your eyes", "m", 0.5, 2.2),
+    ),
+    safety=(
+        "Stay on flat, open ground well away from roads, water and power lines. "
+        "Never look at the sun through the straw. "
+        "Do not climb the tree or pole, and stay off private property."
     ),
 )
 

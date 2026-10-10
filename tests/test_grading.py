@@ -43,3 +43,20 @@ def test_incorrect_answer():
 
 def test_missing_answer():
     assert grade(make_report(None), TRIG_HEIGHT).verdict == "missing_info"
+
+def test_out_of_range_angle():
+    values = {"distance": 10, "angle": 95, "eye_height": 1.5}
+    assert grade(make_report(11.5, values), TRIG_HEIGHT).verdict == "missing_info"
+
+def test_forgot_eye_height_is_spotted():
+    result = grade(make_report(10.0), TRIG_HEIGHT)
+    assert any("eye height" in m for m in result.mistakes)
+
+
+def test_radian_mode_is_spotted():
+    result = grade(make_report(17.7), TRIG_HEIGHT)
+    assert any("radian" in m for m in result.mistakes)
+
+
+def test_no_mistakes_when_correct():
+    assert grade(make_report(11.5), TRIG_HEIGHT).mistakes == ()

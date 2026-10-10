@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from typing import Literal
+import math
 
 from fieldclass.experiments import Experiment, trig_height
 from fieldclass.schemas import Report, Topic
@@ -27,6 +28,7 @@ class Grade:
     verdict: Verdict
     expected: float | None = None
     problems: tuple[str, ...] = ()
+    mistakes: tuple[str, ...] = ()
 
 
 def check_values(report: Report, experiment: Experiment) -> list[str]:
@@ -43,6 +45,37 @@ def check_values(report: Report, experiment: Experiment) -> list[str]:
         problems.append("Your calculated answer is missing")
     return problems
 
+def likely_mistakes(topic: Topic, values: dict[str, float]) -> dict[str, float]:
+    if topic == "trig_height":
+        d, a, e = values["distance"], values["angle"], values["eye_height"]
+        return {
+            "you may have forgotten to add your eye height": d * math.tan(math.radians(a)),
+            "your calculator may be in radian mode instead of degree mode": d * math.tan(a) + e,
+            "you may have used sine instead of tangent": d * math.sin(math.radians(a)) + e,
+            "you may have used cosine instead of tangent": d * math.cos(math.radians(a)) + e,
+        }
+    if topic == "average_velocity":
+        mean_time = (values["time_1"] + values["time_2"] + values["time_3"]) / 3
+        return {
+            "you may have divided time by distance instead of distance by time": mean_time / values["distance"],
+            "you may have used only one of the three times": values["distance"] / values["time_1"],
+        }
+    if topic == "statistics_counts":
+        return {
+            "you may have given a percentage; here we want a fraction such as 0.25": 100 * values["most_common"] / values["total"],
+        }
+    if topic == "plant_leaves":
+        return {
+            "you may have divided width by length instead of length by width": values["leaf_a_width"] / values["leaf_a_length"],
+        }
+    return {}
+
+def diagnose(report: Report) -> list[str]:
+    found = []
+    for message, wrong in likely_mistakes(report.topic, report.values).items():
+        if wrong != 0 and abs(report.answer - wrong) / abs(wrong) <= CORRECT_TOLERANCE:
+            found.append(message)
+    return found
 
 def grade(report: Report, experiment: Experiment) -> Grade:
     problems = check_values(report, experiment)
@@ -56,4 +89,6 @@ def grade(report: Report, experiment: Experiment) -> Grade:
         verdict = "partial"
     else:
         verdict = "incorrect"
-    return Grade(verdict, expected)
+
+    mistakes = [] if verdict == "correct" else diagnose(report)
+    return Grade(verdict, expected, mistakes=tuple(mistakes))

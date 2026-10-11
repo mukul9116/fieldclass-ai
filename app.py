@@ -1,4 +1,7 @@
 import streamlit as st
+import json
+
+import streamlit.components.v1 as components
 
 from fieldclass.experiments import get_experiment
 from fieldclass.feedback import evaluate_report
@@ -20,6 +23,39 @@ ANSWER_HELP = {
     "plant_leaves": "length divided by width of leaf A",
     "average_velocity": "average velocity in metres per second, using the mean of your times",
 }
+
+def mission_script(mission) -> str:
+    parts = [mission.title + ".", mission.objective, "Bring: " + ", ".join(mission.materials) + "."]
+    for number, step in enumerate(mission.steps, start=1):
+        parts.append(f"Step {number}. {step}")
+    parts.append("Write down: " + ", ".join(mission.record) + ".")
+    parts.append("Safety. " + mission.safety)
+    return " ".join(parts)
+
+def read_aloud_button(text: str):
+    safe_text = json.dumps(text).replace("</", "<\\/")
+    components.html(
+        f"""
+        <button id="speak" style="padding:8px 14px;font-size:16px;">🔊 Read aloud</button>
+        <button id="stop" style="padding:8px 14px;font-size:16px;">⏹ Stop</button>
+        <script>
+        const text = {safe_text};
+        const synth = window.speechSynthesis;
+        document.getElementById("speak").onclick = () => {{
+            synth.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            const voices = synth.getVoices();
+            const nice = voices.find(v => /natural|online|google/i.test(v.name) && v.lang.startsWith("en"));
+            if (nice) utterance.voice = nice;
+            synth.speak(utterance);
+        }};
+        document.getElementById("stop").onclick = () => synth.cancel();
+        window.addEventListener("pagehide", () => synth.cancel());
+        window.addEventListener("unload", () => synth.cancel());
+        </script>
+        """,
+        height=60,
+    )
 
 st.set_page_config(page_title="FieldClass AI", page_icon="🌿")
 
@@ -55,6 +91,7 @@ def show_mission():
     st.title(mission.title)
     st.write(mission.objective)
     st.info("Read this. Then put your phone away.")
+    read_aloud_button(mission_script(mission))
     st.write(f"About {mission.minutes} minutes · {mission.difficulty}")
     st.subheader("Bring")
     for item in mission.materials:
@@ -95,7 +132,7 @@ def show_feedback(feedback):
             st.write("**Why it works:** " + feedback.concept)
     st.write("**Next challenge:** " + feedback.next_challenge)
     if st.button("Start a new mission"):
-        for key in ("mission", "report", "feedback", "revealed"):
+        for key in ("mission", "report", "feedback", "revealed", "voice_on"):
             st.session_state.pop(key, None)
         st.session_state.step = "start"
         st.rerun()

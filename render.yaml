@@ -1,0 +1,30 @@
+services:
+  - type: pserv
+    name: fieldclass-model
+    runtime: docker
+    dockerfilePath: ./deploy/ollama/Dockerfile
+    dockerContext: ./deploy/ollama
+    plan: standard
+    envVars:
+      - key: OLLAMA_HOST
+        value: 0.0.0.0:11434
+      - key: PORT
+        value: "11434"
+    disk:
+      name: ollama-models
+      mountPath: /root/.ollama
+      sizeGB: 2
+
+  - type: web
+    name: fieldclass-app
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: standard
+    envVars:
+      - key: FIELDCLASS_PROFILE
+        value: hosted
+      - key: OLLAMA_HOST
+        fromService:
+          type: pserv
+          name: fieldclass-model
+          property: hostport

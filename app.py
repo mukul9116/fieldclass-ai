@@ -59,13 +59,41 @@ def read_aloud_button(text: str):
 
 st.set_page_config(page_title="FieldClass AI", page_icon="🌿")
 
+st.markdown(
+    """
+    <style>
+    .hero {background: linear-gradient(135deg, #2E7D32, #66BB6A); color: white;
+           padding: 22px 26px; border-radius: 16px; margin-bottom: 14px;}
+    .hero-title {font-size: 2rem; font-weight: 800;}
+    .hero-sub {opacity: 0.95;}
+    .pill {display: inline-block; padding: 4px 12px; margin: 0 6px 12px 0; border-radius: 999px;
+           background: #E3F1DC; color: #2E5E32; font-size: 0.85rem;}
+    .pill.active {background: #2E7D32; color: white; font-weight: 600;}
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+STEP_NAMES = ["Choose", "Mission", "Report", "Feedback"]
+
+
+def show_header(active: int):
+    pills = "".join(
+        f'<span class="pill{" active" if i == active else ""}">{i + 1}. {name}</span>'
+        for i, name in enumerate(STEP_NAMES)
+    )
+    st.markdown(
+        '<div class="hero"><div class="hero-title">🌿 FieldClass AI</div>'
+        '<div class="hero-sub">Your textbook becomes a field experiment.</div></div>' + pills,
+        unsafe_allow_html=True,
+    )
+
 if "step" not in st.session_state:
     st.session_state.step = "start"
 
 
 def show_start():
-    st.title("FieldClass AI")
-    st.caption("Your textbook becomes a field experiment.")
+    show_header(0)
     st.write("Turn what you study into something you can experience.")
     topic = st.selectbox("What are you studying?", list(TOPIC_LABELS), format_func=TOPIC_LABELS.get)
     difficulty = st.radio("Difficulty", ["easy", "medium", "hard"], index=1, horizontal=True)
@@ -88,31 +116,46 @@ def show_start():
 
 def show_mission():
     mission = st.session_state.mission
+    show_header(1)
     st.title(mission.title)
     st.write(mission.objective)
     st.info("Read this. Then put your phone away.")
     read_aloud_button(mission_script(mission))
-    st.write(f"About {mission.minutes} minutes · {mission.difficulty}")
-    st.subheader("Bring")
-    for item in mission.materials:
-        st.write("- " + item)
-    st.subheader("Do")
-    for number, step in enumerate(mission.steps, start=1):
-        st.write(f"{number}. {step}")
-    st.subheader("Write down")
-    for item in mission.record:
-        st.write("- " + item)
-    st.warning("Safety: " + mission.safety)
-    st.caption("Tip: " + mission.tip)
-    if st.button("I'm back with my results"):
+    st.caption(f"About {mission.minutes} minutes · {mission.difficulty}")
+    left, right = st.columns(2)
+    with left:
+        with st.container(border=True):
+            st.subheader("🎒 Bring")
+            for item in mission.materials:
+                st.checkbox(item, key=f"pack_{mission.topic}_{item}")
+        with st.container(border=True):
+            st.subheader("📝 Write down")
+            for item in mission.record:
+                st.write("- " + item)
+    with right:
+        with st.container(border=True):
+            st.subheader("🧭 Do")
+            for number, step in enumerate(mission.steps, start=1):
+                st.write(f"**{number}.** {step}")
+    st.warning("⚠️ Safety: " + mission.safety)
+    st.caption("💡 Tip: " + mission.tip)
+    if st.button("I'm back with my results", type="primary"):
         st.session_state.step = "report"
         st.rerun()
+
+def show_answer_chart(report):
+    expected = expected_answer(report.topic, report.values)
+    error = abs(report.answer - expected) / expected
+    closeness = max(0.0, min(1.0, 1 - error))
+    st.progress(closeness, text=f"Closeness to your own measurements: {closeness * 100:.0f}%")
+    st.bar_chart({"value": {"Your answer": report.answer, "From your measurements": expected}})
 
 def show_feedback(feedback):
     st.divider()
     st.subheader("Your feedback")
     if feedback.verdict == "correct":
         st.success("Correct")
+        show_answer_chart(st.session_state.report)
     elif feedback.verdict == "partial":
         st.warning("Close")
     elif feedback.verdict == "incorrect":
@@ -129,6 +172,7 @@ def show_feedback(feedback):
         if st.session_state.get("revealed"):
             report = st.session_state.report
             st.write(f"Using your own measurements, the answer is about {expected_answer(report.topic, report.values):.2f}.")
+            show_answer_chart(report)
             st.write("**Why it works:** " + feedback.concept)
     st.write("**Next challenge:** " + feedback.next_challenge)
     if st.button("Start a new mission"):
@@ -138,6 +182,7 @@ def show_feedback(feedback):
         st.rerun()
 
 def show_report():
+    show_header(3 if "feedback" in st.session_state else 2)
     mission = st.session_state.mission
     experiment = get_experiment(mission.topic)
     st.title("Welcome back")

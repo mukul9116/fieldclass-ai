@@ -3,7 +3,6 @@ __pycache__
 *.pyc
 .env.*
 .env
-.streamlit/secrets.toml
 *.gguf
 model/
 data/

@@ -10,7 +10,9 @@ Built for the Hacktoberfest 2026 Open-Source AI Challenge, Week 1, theme **Touch
 
 ![Start screen](docs/images/start.png)
 
-![A generated mission](docs/images/mission.png)
+![A generated mission](docs/images/mission1.png)
+
+![A generated mission](docs/images/mission2.png)
 
 ![Feedback after the report](docs/images/feedback.png)
 

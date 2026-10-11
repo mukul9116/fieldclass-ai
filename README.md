@@ -20,9 +20,10 @@ Built for the Hacktoberfest 2026 Open-Source AI Challenge, Week 1, theme **Touch
 
 1. Choose a topic, a difficulty and how many minutes you have.
 2. FieldClass writes a short field mission: what to bring, what to do, what to write down, and a safety note.
-3. Put your phone away and carry out the mission outdoors.
-4. Come back and enter your measurements and your own calculated answer.
-5. FieldClass checks your answer against your own measurements, tells you what went well, and gives a hint before it shows any answer.
+3. The mission can be read aloud with the browser's built-in speech engine, so you can listen while you walk to your spot.
+4. Put your phone away and carry out the mission outdoors.
+5. Come back and enter your measurements and your own calculated answer.
+6. FieldClass checks your answer against your own measurements, tells you what went well, and gives a hint before it shows any answer.
 
 The four starting topics:
 

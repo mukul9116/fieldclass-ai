@@ -19,14 +19,6 @@ PROFILES = {
         num_ctx =  2048,
         timeout_s = 60.0,
     ),
-    "hosted": ModelProfile(
-        name="hosted",
-        model="gemma3:1b",
-        temperature=0.4,
-        num_predict=300,
-        num_ctx=2048,
-        timeout_s=180.0,
-    ),
 }
 
    
